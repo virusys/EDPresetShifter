@@ -54,7 +54,7 @@ int main(int argc, const char * argv[]) {
 
 					for (int i = 99; i >= 0; i--) {
 						NSDictionary *patternDict = [presetDict objectForKey:[NSString stringWithFormat:@"pattern_%d", i]];
-						if (!determineIfPatternIsBlank(patternDict) && destinationPattern >= 0) {
+						if (!determineIfPatternIsBlank(patternDict) && destinationPattern >= 0 && i < destinationPattern) {
 							NSLog(@"shifting pattern %d to %d", i, destinationPattern);
 							[presetDict setObject:patternDict forKey:[NSString stringWithFormat:@"pattern_%d", destinationPattern]];
 							[presetDict removeObjectForKey:[NSString stringWithFormat:@"pattern_%d", i]];
