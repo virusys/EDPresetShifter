@@ -53,19 +53,14 @@ int main(int argc, const char * argv[]) {
                             int startPattern = 0;
                             int endPattern = 99;
                             
-                            if (argc > 3) {
-                                NSString *numFlag = [NSString stringWithCString:argv[2] encoding:NSUTF8StringEncoding];
+                            if (argc > 4) {
+                                startPattern = [[NSString stringWithCString:argv[3] encoding:NSUTF8StringEncoding] intValue];
+                                endPattern = [[NSString stringWithCString:argv[4] encoding:NSUTF8StringEncoding] intValue];
                                 
-                                NSArray *subStrings = [numFlag componentsSeparatedByString:@"-"]; //or rather @" - "
-                                
-                                
-                                if (subStrings.count) {
-                                    startPattern = [[subStrings objectAtIndex:0] intValue];
-                                    
-                                    if (subStrings.count > 1) {
-                                        endPattern = [[subStrings objectAtIndex:1] intValue];
-                                    }
-                                }
+                                if (startPattern < 0 || startPattern > 99 || endPattern < 0 || endPattern > 99 || endPattern < startPattern) {
+                                    NSLog(@"start pattern should be lower than end pattern and be in the range from 0-99!");
+                                    return 0;
+                                }                                
                             }
                             
                             
