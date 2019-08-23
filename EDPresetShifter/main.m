@@ -27,6 +27,25 @@ bool determineIfPatternIsBlank(NSDictionary *pattern) {
     return true;
 }
 
+NSArray *halvedArrayFromArray(NSArray *array) {
+    if (array.count > 1) {
+        NSLog(@"input array: %@", array);
+        NSMutableArray *automateCopy = [NSMutableArray array];
+        int k = 0;
+        for (NSNumber *number in array) {
+            if (k % 2 == 0) { // eliminate all odd entries
+                [automateCopy addObject:number];
+            }
+            k++;
+        }
+        [automateCopy addObjectsFromArray:automateCopy];
+        
+        NSLog(@"output array: %@", automateCopy);
+        return automateCopy;
+    }
+    else return array;
+}
+
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         if (argc > 1) {
@@ -60,7 +79,7 @@ int main(int argc, const char * argv[]) {
                                 if (startPattern < 0 || startPattern > 99 || endPattern < 0 || endPattern > 99 || endPattern < startPattern) {
                                     NSLog(@"start pattern should be lower than end pattern and be in the range from 0-99!");
                                     return 0;
-                                }                                
+                                }
                             }
                             
                             
@@ -108,15 +127,21 @@ int main(int argc, const char * argv[]) {
                                         [patternDict removeObjectForKey:@"masterData"];
                                         [patternDict setObject:masterData forKey:@"masterData"];
                                         
+                                        for (int j = 0; j < 10; j++) {
+                                            NSString *automateKey = [NSString stringWithFormat:@"automate%d", j];
+                                            NSMutableArray *automateArray = [instDict objectForKey:automateKey];
+                                            NSArray *automateCopy = halvedArrayFromArray(automateArray);
+                                            
+                                             
+                                            
+                                            [instDict removeObjectForKey:automateKey];
+                                            [instDict setObject:automateCopy forKey:automateKey];
+                                        }
+                                        
                                         [patternDict removeObjectForKey:instKey];
                                         [patternDict setObject:instDict forKey:instKey];
                                         
-//                                        NSLog(@"getting instDict for %@ ->\n%@", instKey, instDict);
-                                        
-                                        //TODO automation??
-                                        //                                        for (int j = 0; j < 10; j++) {
-                                        //
-                                        //                                        }
+
                                     }
                                     
                                     //effects
@@ -128,25 +153,26 @@ int main(int argc, const char * argv[]) {
 //                                        NSLog(@"%d: masterData: %@", i, masterData);
                                         for (int j = 0; j < 8; j++) {
                                             NSMutableArray *automateArray = [masterData objectForKey:[NSString stringWithFormat:@"automate%d", j]];
-                                                                                        
-                                            if (automateArray.count > 1) {
-                                                
-                                                NSLog(@"automateArray %d: %@", j, automateArray);
-                                                NSMutableArray *automateCopy = [NSMutableArray array];
-                                                int k = 0;
-                                                for (NSNumber *number in automateArray) {
-                                                    if (k % 2 == 0) { // eliminate all odd entries
-                                                        [automateCopy addObject:number];
-                                                    }
-                                                    k++;
-                                                }
-                                                [automateCopy addObjectsFromArray:automateCopy];
-                                                
-                                                NSLog(@"automateArray %d AFTER: %@", j, automateCopy);
-                                                
-                                                [masterData removeObjectForKey:[NSString stringWithFormat:@"automate%d", j]];
-                                                [masterData setObject:automateCopy forKey:[NSString stringWithFormat:@"automate%d", j]];
-                                            }
+                                            NSArray *automateCopy = halvedArrayFromArray(automateArray);
+                                            
+//                                            if (automateArray.count > 1) {
+//
+//                                                NSLog(@"automateArray %d: %@", j, automateArray);
+//                                                NSMutableArray *automateCopy = [NSMutableArray array];
+//                                                int k = 0;
+//                                                for (NSNumber *number in automateArray) {
+//                                                    if (k % 2 == 0) { // eliminate all odd entries
+//                                                        [automateCopy addObject:number];
+//                                                    }
+//                                                    k++;
+//                                                }
+//                                                [automateCopy addObjectsFromArray:automateCopy];
+//
+//                                                NSLog(@"automateArray %d AFTER: %@", j, automateCopy);
+                                            
+                                            [masterData removeObjectForKey:[NSString stringWithFormat:@"automate%d", j]];
+                                            [masterData setObject:automateCopy forKey:[NSString stringWithFormat:@"automate%d", j]];
+                                            //                                            }
                                         }
                                         
                                         [patternDict removeObjectForKey:@"masterData"];
