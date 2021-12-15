@@ -48,9 +48,9 @@ NSArray *halvedArrayFromArray(NSArray *array) {
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
-        if (argc > 1) {
+        if (argc) {
             
-            NSString *fileName = [NSString stringWithCString:argv[1] encoding:NSUTF8StringEncoding];
+            NSString *fileName = [NSString stringWithCString:argv[argc-1] encoding:NSUTF8StringEncoding];
             if (![fileName hasSuffix:@"plist"]) {
                 NSLog(@"error: not a plist file.");
                 return 0;
@@ -64,7 +64,7 @@ int main(int argc, const char * argv[]) {
                     // open and shift down the preset file
                     
                     if (argc > 2) {
-                        NSString *flag = [NSString stringWithCString:argv[2] encoding:NSUTF8StringEncoding];
+                        NSString *flag = [NSString stringWithCString:argv[1] encoding:NSUTF8StringEncoding];
                         
                         // options for shifting the tempo X and keeping everything intact
                         if ([flag isEqualToString:@"-s"]) { //shorten
@@ -73,8 +73,8 @@ int main(int argc, const char * argv[]) {
                             int endPattern = 99;
                             
                             if (argc > 4) {
-                                startPattern = [[NSString stringWithCString:argv[3] encoding:NSUTF8StringEncoding] intValue];
-                                endPattern = [[NSString stringWithCString:argv[4] encoding:NSUTF8StringEncoding] intValue];
+                                startPattern = [[NSString stringWithCString:argv[2] encoding:NSUTF8StringEncoding] intValue];
+                                endPattern = [[NSString stringWithCString:argv[3] encoding:NSUTF8StringEncoding] intValue];
                                 
                                 if (startPattern < 0 || startPattern > 99 || endPattern < 0 || endPattern > 99 || endPattern < startPattern) {
                                     NSLog(@"start pattern should be lower than end pattern and be in the range from 0-99!");
@@ -206,6 +206,8 @@ int main(int argc, const char * argv[]) {
                     }
                     NSLog(@"writing this preset dict: %@", presetDict);
                     [presetDict writeToFile:fileName atomically:YES];
+                } else {
+                    NSLog(@"Error, file does not exist at path: %@!", fileName);
                 }
             }
         }
